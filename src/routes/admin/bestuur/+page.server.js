@@ -13,7 +13,6 @@ async function authenticate() {
 export async function load() {
   await authenticate();
 
-  // We halen het nieuwste bestuur op (of een lege lijst als er nog geen is)
   const [besturen, personen] = await Promise.all([
     pb.collection('bestuur').getFullList({ sort: '-created' }),
     pb.collection('personen').getFullList({ sort: 'naam' })
@@ -31,7 +30,6 @@ export const actions = {
     const formData = await request.formData();
     const id = formData.get('id');
 
-    // Check of er een nieuwe foto is geüpload
     const foto = formData.get('foto');
     if (foto instanceof File && foto.size === 0) {
       formData.delete('foto');

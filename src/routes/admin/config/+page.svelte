@@ -3,7 +3,6 @@
 
   export let data;
 
-  // Initialiseer lokale staat met serverdata of standaardwaarden
   let config = data.config || {
     titel: 'Ledenlijst',
     jaargang: 'Jaargang 1',
