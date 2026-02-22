@@ -1,0 +1,96 @@
+{
+  "config": {
+    "titel": "Gouwe Gilde Gezichten Gids",
+    "jaargang": "JAARGANG 37",
+    "jaren": "2025-2026",
+    "hoofdkleur": "#db1f0d"
+  },
+  "bestuur": {
+    "naam": "Bestuur Valent 2025-2026",
+    "foto": "/fotos/bestuur.jpg",
+    "leden": [
+      { "rol": "Penningmeester", "naam": "Yannick Ottens" },
+      { "rol": "Vice-voorzitter", "naam": "Casper Langeslag" },
+      { "rol": "Secretaris", "naam": "Ruben Uijtdewilligen" },
+      { "rol": "Voorzitter", "naam": "Fleur Valent" },
+      { "rol": "Algemeen bestuurslid", "naam": "Loth Kester" }
+    ]
+  },
+  "studies": {
+    "BAT": "Agrotechnologie",
+    "BBC": "Bedrijfs- en Consumentenwetenschappen",
+    "BBI": "Biologie",
+    "BDW": "Dierwetenschappen",
+    "BES": "Environmental Sciences",
+    "BFT": "Food Technology",
+    "BLP": "Landschapsarchitectuur en Planning",
+    "BML": "Moleculaire levenswetenschappen",
+    "BVG": "Voeding en Gezondheid",
+    "MAS": "Animal Sciences",
+    "MBT": "Biotechnology",
+    "MDR": "Development and Rural Innovation",
+    "MEE": "Earth and Environment",
+    "MFT": "Food Technology",
+    "MFQ": "Food Quality Management",
+    "MME": "Management, Economics and Consumer Studies",
+    "MNH": "Nutrition and Health",
+    "MPB": "Plant Biotechnology",
+    "MRF": "Resilient Farming and Food Systems"
+  },
+  "leden": [
+    {
+      "naam": "Jan Smit",
+      "geboortedatum": "01-01-1990",
+      "email": "jan.smit@gmail.com",
+      "adres_student": "Studentenstraat 1",
+      "postcode_student": "1234 AB Wageningen",
+      "telefoon": "06-12345678",
+      "studie": "BAT",
+      "adres_thuisthuis": "Straat 1",
+      "postcode_thuisthuis": "1234 AB Roosendaal",
+      "foto": "/fotos/jansmit.png"
+    }
+  ],
+  "ereleden": [
+    {
+      "naam": "Jan Smit",
+      "geboortedatum": "01-01-1990",
+      "email": "jan.smit@gmail.com",
+      "adres_student": "Studentenstraat 1",
+      "postcode_student": "1234 AB Wageningen",
+      "telefoon": "06-12345678",
+      "studie": "BAT",
+      "adres_thuisthuis": "Straat 1",
+      "postcode_thuisthuis": "1234 AB Roosendaal",
+      "foto": "/fotos/jansmit.png"
+    }
+  ],
+  "aspiranten": [
+    {
+      "naam": "Jan Smit",
+      "geboortedatum": "01-01-1990",
+      "email": "jan.smit@gmail.com",
+      "adres_student": "Studentenstraat 1",
+      "postcode_student": "1234 AB Wageningen",
+      "telefoon": "06-12345678",
+      "studie": "BAT",
+      "adres_thuisthuis": "Straat 1",
+      "postcode_thuisthuis": "1234 AB Roosendaal",
+      "foto": "/fotos/jansmit.png"
+    }
+  ],
+  "reunisten": [
+    {
+      "naam": "Jan Smit",
+      "geboortedatum": "01-01-1990",
+      "email": "jan.smit@gmail.com",
+      "adres_student": "Studentenstraat 1",
+      "postcode_student": "1234 AB Wageningen",
+      "telefoon": "06-12345678",
+      "studie": "BAT",
+      "adres_thuisthuis": "Straat 1",
+      "postcode_thuisthuis": "1234 AB Roosendaal",
+      "foto": "/fotos/jansmit.png"
+    }
+  ]
+}
