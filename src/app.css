@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+@plugin "daisyui" {
+  themes: corporate --default;
+  logs: false;
+}
+@plugin "daisyui/theme" {
+  name: corporate;
+  default: true;
+  --color-primary: #db1f0d;
+}
+
+@font-face {
+  font-family: 'Century Gothic Pro';
+  src: url('/century-gothic-pro-italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Century Gothic Pro';
+  src: url('/century-gothic-pro-bold-italic.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+.century-gothic-italic {
+  font-family: 'Century Gothic Pro', sans-serif;
+  font-style: italic;
+}
+
+.century-gothic-italic-bold {
+  font-family: 'Century Gothic Pro', sans-serif;
+  font-style: italic;
+  font-weight: bold;
+}
