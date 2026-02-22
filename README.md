@@ -1,22 +1,10 @@
-# sv
+# 📒 gggg-creator
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```sh
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
+Generator for the Gouwe Gilde Gezichten Gids of Het BSG
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Once you've installed dependencies with `npm install`, start a development server:
 
 ```sh
 npm run dev
@@ -25,14 +13,11 @@ npm run dev
 npm run dev -- --open
 ```
 
-## Building
+## Credits
 
-To create a production version of your app:
+Built by Ruben Uijtdewilligen for Het Brabants Studenten Gilde.
 
-```sh
-npm run build
-```
+Design of GGGG based on old versions. Credits to Isa Tiebosch for sharing her CorelDRAW source file (GGGG 2023-2024).
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Generator: (c) 2026 Ruben Uijtdewilligen. All rights reserved.<br />
+Design: (c) Het Brabants Studenten Gilde.
