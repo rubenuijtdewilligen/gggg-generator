@@ -19,7 +19,6 @@ export async function load() {
     pb.collection('studies').getFullList()
   ]);
 
-  // Statistieken berekenen
   const stats = {
     totaal: personen.length,
     leden: personen.filter((p) => p.status === 'lid').length,
