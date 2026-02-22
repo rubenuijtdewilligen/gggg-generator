@@ -1,8 +1,7 @@
 <script>
-  import data from '$lib/data.json';
+  export let data;
 
   const formatDate = (str) => str || '';
-
   const getDay = (str) => (str ? parseInt(str.split('-')[0]) : 0);
   const getMonth = (str) => (str ? parseInt(str.split('-')[1]) : 0);
 
@@ -33,15 +32,7 @@
   let verjaardagen = {};
   for (let i = 1; i <= 12; i++) verjaardagen[i] = [];
 
-  const alleMensen = [
-    ...(data.leden || []),
-    ...(data.ereleden || []),
-    ...(data.aspiranten || []),
-    ...(data.reunisten || []),
-    ...(data.bestuur.leden || [])
-  ];
-
-  alleMensen.forEach((p) => {
+  data.personen.forEach((p) => {
     if (p.geboortedatum) {
       const m = getMonth(p.geboortedatum);
       if (verjaardagen[m]) {
@@ -49,30 +40,34 @@
       }
     }
   });
+  for (let i = 1; i <= 12; i++) verjaardagen[i].sort((a, b) => a.dag - b.dag);
 
-  for (let i = 1; i <= 12; i++) {
-    verjaardagen[i].sort((a, b) => a.dag - b.dag);
-  }
+  const leden = data.personen.filter((p) => p.status === 'lid');
+  const ereleden = data.personen.filter((p) => p.status === 'erelid');
+  const aspiranten = data.personen.filter((p) => p.status === 'aspirant');
+  const reünisten = data.personen.filter((p) => p.status === 'reunist');
 
-  const rawReunisten = data.reunisten || [];
-  const reunistenMetFoto = rawReunisten.filter((l) => l.foto && l.foto.trim() !== '');
-  const reunistenZonderFoto = rawReunisten.filter((l) => !l.foto || l.foto.trim() === '');
+  const reunistenMetFoto = reünisten.filter((l) => l.foto);
+  const reunistenZonderFoto = reünisten.filter((l) => !l.foto);
 
   const categorieen = [
-    { naam: 'Leden', data: data.leden || [] },
-    { naam: 'Ere-leden', data: data.ereleden || [] },
-    { naam: 'Aspiranten', data: data.aspiranten || [] },
+    { naam: 'Leden', data: leden },
+    { naam: 'Ere-leden', data: ereleden },
+    { naam: 'Aspiranten', data: aspiranten },
     { naam: 'Reünisten', data: reunistenMetFoto }
   ];
 
-  const alleStudies = Object.entries(data.studies || {}).sort((a, b) => a[0].localeCompare(b[0]));
-  const bachelors = alleStudies.filter(([code]) => code.toUpperCase().startsWith('B'));
-  const masters = alleStudies.filter(([code]) => code.toUpperCase().startsWith('M'));
+  const bachelors = data.studiesList.filter((s) => s.code.toUpperCase().startsWith('B'));
+  const masters = data.studiesList.filter((s) => s.code.toUpperCase().startsWith('M'));
 </script>
 
-<div class="w-[210mm] mx-auto bg-white font-sans text-xs">
+<div
+  class="w-[210mm] mx-auto bg-white font-sans text-xs"
+  style="--primary-color: {data.config.hoofdkleur};"
+>
   <section
-    class="h-[297mm] w-full p-[10mm_15mm] overflow-hidden break-after-page flex flex-col justify-center items-center text-center bg-primary"
+    class="h-[297mm] w-full p-[10mm_15mm] overflow-hidden break-after-page flex flex-col justify-center items-center text-center"
+    style="background-color: var(--primary-color);"
   >
     <h1
       class="century-gothic-italic text-white text-7xl leading-loose"
@@ -123,7 +118,6 @@
 
   <section class="h-[297mm] w-full p-[10mm_15mm] overflow-hidden break-after-page">
     <h2 class="text-4xl century-gothic-italic-bold text-center mb-4">Verjaardagen</h2>
-
     <div class="grid grid-cols-2 gap-x-10 gap-y-1 text-sm">
       {#each [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12] as m}
         <div class="mb-1 break-inside-avoid">
@@ -148,20 +142,19 @@
     <div class="flex gap-[20mm] mt-[10mm] text-[10pt]">
       <div class="flex-1 flex flex-col gap-1">
         <h3 class="font-bold text-lg mb-4 border-b border-gray-300 pb-1">Bachelor</h3>
-        {#each bachelors as [code, naam]}
+        {#each bachelors as s}
           <div class="flex items-baseline leading-snug">
-            <span class="font-bold w-[60px] shrink-0">{code}</span>
-            <span>{naam}</span>
+            <span class="font-bold w-[60px] shrink-0">{s.code}</span>
+            <span>{s.naam}</span>
           </div>
         {/each}
       </div>
-
       <div class="flex-1 flex flex-col gap-1">
         <h3 class="font-bold text-lg mb-4 border-b border-gray-300 pb-1">Master</h3>
-        {#each masters as [code, naam]}
+        {#each masters as s}
           <div class="flex items-baseline leading-snug">
-            <span class="font-bold w-[60px] shrink-0">{code}</span>
-            <span>{naam}</span>
+            <span class="font-bold w-[60px] shrink-0">{s.code}</span>
+            <span>{s.naam}</span>
           </div>
         {/each}
       </div>
@@ -172,12 +165,8 @@
     {#if categorie.data.length > 0}
       {#each chunkArray(categorie.data, 8) as paginaLeden}
         {@const rijen = chunkArray(paginaLeden, 2)}
-
         <section class="h-[297mm] w-full p-[10mm_15mm] overflow-hidden break-after-page">
-          <h2 class="text-5xl century-gothic-italic-bold text-center my-8">
-            {categorie.naam}
-          </h2>
-
+          <h2 class="text-5xl century-gothic-italic-bold text-center my-8">{categorie.naam}</h2>
           <div class="flex flex-col gap-[5mm] mt-[5mm]">
             {#each rijen as rijLeden, rijIndex}
               <div class="grid grid-cols-2 gap-[15mm]">
@@ -188,35 +177,27 @@
                         <img src={lid.foto} alt={lid.naam} class="w-full h-full object-cover" />
                       {/if}
                     </div>
-
                     <div class="text-[10px] leading-[1.3] overflow-hidden">
                       <b class="text-xs mb-0.5 block">{lid.naam}</b>
                       <p>{formatDate(lid.geboortedatum)}</p>
                       <p class="break-all">{lid.email}</p>
-
                       <br />
-
                       {#if lid.adres_student}
                         <p>{lid.adres_student}</p>
-                        <p>{lid.postcode_student}</p>
+                        <p>{lid.postcode_student || ''}</p>
                       {/if}
-                      <p>{lid.telefoon}</p>
-
+                      <p>{lid.telefoon || ''}</p>
                       <br />
-
-                      {#if lid.studie}<p>{lid.studie}</p>{/if}
-
+                      {#if lid.studieCode}<p>{lid.studieCode}</p>{/if}
                       <br />
-
                       {#if lid.adres_thuisthuis}
                         <p>{lid.adres_thuisthuis}</p>
-                        <p>{lid.postcode_thuisthuis}</p>
+                        <p>{lid.postcode_thuisthuis || ''}</p>
                       {/if}
                     </div>
                   </div>
                 {/each}
               </div>
-
               {#if rijIndex < rijen.length - 1}
                 <div class="h-[15px] w-full bg-[#999]"></div>
               {/if}
@@ -233,53 +214,44 @@
       <div class="columns-2 gap-[10mm]">
         {#each reunistenZonderFoto as lid}
           <div class="mb-4 break-inside-avoid">
-            <div class="font-bold">
-              {lid.naam}
-            </div>
+            <div class="font-bold">{lid.naam}</div>
             <div>{formatDate(lid.geboortedatum)}</div>
             <div>{lid.adres_student || lid.adres_thuisthuis || ''}</div>
             <div>{lid.postcode_student || lid.postcode_thuisthuis || ''}</div>
-            <div>{lid.telefoon}</div>
-            <div class="break-all">{lid.email}</div>
+            <div>{lid.telefoon || ''}</div>
+            <div class="break-all">{lid.email || ''}</div>
           </div>
         {/each}
       </div>
     </section>
   {/if}
 
-  <section class="h-[297mm] w-full break-after-page bg-primary"></section>
+  <section
+    class="h-[297mm] w-full break-after-page"
+    style="background-color: var(--primary-color);"
+  ></section>
 </div>
 
 <style>
   @media print {
     @page {
       size: A4;
-      margin: 0; /* Verwijder de browser marges */
+      margin: 0;
     }
-
     :global(body) {
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
       margin: 0;
       padding: 0;
     }
-
-    /* Zorg dat de container de volledige breedte pakt en niet centreert */
     .w-\[210mm\] {
       width: 210mm !important;
       margin: 0 !important;
-    }
-
-    /* Voorkom page break na het allerlaatste element */
-    section:last-child {
-      break-after: auto !important;
-      page-break-after: auto !important;
-    }
-
-    /* Forceer de container om precies te passen */
-    .w-\[210mm\] {
       height: auto !important;
       overflow: visible !important;
+    }
+    section:last-child {
+      break-after: auto !important;
     }
   }
 </style>
