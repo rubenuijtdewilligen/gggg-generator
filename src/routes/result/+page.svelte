@@ -89,7 +89,7 @@
   <section class="h-[297mm] w-full p-[10mm_15mm] overflow-hidden break-after-page"></section>
 
   <section class="h-[297mm] w-full p-[10mm_15mm] overflow-hidden break-after-page text-2xl">
-    <img src="/logo.svg" alt="Logo" class="mt-16 opacity-40" />
+    <img src="/logo.svg" alt="Logo" class="mt-16 opacity-40 h-160" />
     <p class="mt-24">
       Brabants Studenten Gilde<br />
       Hollandseweg 1<br />
