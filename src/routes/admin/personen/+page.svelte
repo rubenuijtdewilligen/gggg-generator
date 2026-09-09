@@ -33,7 +33,7 @@
         </tr>
       </thead>
       <tbody class="divide-y">
-        {#each data.personen as p}
+        {#each data.personen as p (p.id)}
           <tr class="hover:bg-gray-50 transition">
             <td class="p-4">
               <div class="w-10 h-10 bg-gray-100 rounded-full overflow-hidden border">
@@ -204,7 +204,7 @@
                   class="w-full border rounded-lg p-2.5 mt-1"
                 >
                   <option value="">Geen</option>
-                  {#each data.studies as s}
+                  {#each data.studies as s (s.id)}
                     <option value={s.id}>{s.code} - {s.naam}</option>
                   {/each}
                 </select>

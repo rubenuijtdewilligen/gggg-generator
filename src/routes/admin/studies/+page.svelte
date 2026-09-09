@@ -32,7 +32,7 @@
         </tr>
       </thead>
       <tbody class="divide-y">
-        {#each data.studies as s}
+        {#each data.studies as s (s.id)}
           <tr class="hover:bg-gray-50 transition">
             <td class="p-4 font-mono font-bold text-blue-600">{s.code}</td>
             <td class="p-4">{s.naam}</td>

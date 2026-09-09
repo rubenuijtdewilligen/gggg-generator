@@ -29,7 +29,7 @@
     use:enhance={({ formData }) => {
       formData.set('leden_json', JSON.stringify(ledenLijst));
 
-      return async ({ result, update }) => {
+      return async ({ update }) => {
         await update({ reset: false });
       };
     }}
@@ -84,7 +84,7 @@
       </div>
 
       <div class="space-y-3">
-        {#each ledenLijst as lid, i}
+        {#each ledenLijst as lid, i (i)}
           <div class="flex gap-3 items-center group">
             <div class="bg-gray-50 p-1 rounded-lg text-gray-400 text-xs w-8 text-center">
               {i + 1}
@@ -111,8 +111,8 @@
         {/each}
 
         <datalist id="personen-namen">
-          {#each data.personen as p}
-            <option value={p.naam} />
+          {#each data.personen as p (p.naam)}
+            <option value={p.naam}></option>
           {/each}
         </datalist>
 

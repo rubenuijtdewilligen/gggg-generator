@@ -1,4 +1,6 @@
 <script>
+  import { resolve } from '$app/paths';
+
   export let data;
   const { stats, huidigBestuur } = data;
 
@@ -77,9 +79,9 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     <div class="grid grid-cols-1 gap-4">
-      {#each menus as item}
+      {#each menus as item (item.href)}
         <a
-          href={item.href}
+          href={resolve(item.href)}
           target={item.target || '_self'}
           class="group flex items-center p-6 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all"
         >
@@ -123,7 +125,7 @@
           <h2 class="text-3xl font-serif italic mb-2">{huidigBestuur.naam}</h2>
 
           <div class="mt-8 space-y-2 opacity-80">
-            {#each leden as lid}
+            {#each leden as lid (lid.naam)}
               <div class="text-sm border-l border-blue-500 pl-4 py-1">
                 <span class="font-bold">{lid.rol}:</span>
                 {lid.naam}

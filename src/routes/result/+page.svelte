@@ -105,7 +105,7 @@
     />
     <div class="text-lg text-center">
       <i>van links naar rechts</i>
-      {#each data.bestuur.leden as lid}
+      {#each data.bestuur.leden as lid (lid.naam)}
         <div>{lid.rol}: {lid.naam}</div>
       {/each}
     </div>
@@ -119,14 +119,14 @@
   <section class="h-[297mm] w-full p-[10mm_15mm] overflow-hidden break-after-page">
     <h2 class="text-4xl century-gothic-italic-bold text-center mb-4">Verjaardagen</h2>
     <div class="grid grid-cols-2 gap-x-10 gap-y-1 text-sm">
-      {#each [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12] as m}
+      {#each [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12] as m (m)}
         <div class="mb-1 break-inside-avoid">
           <div
             class="font-bold mb-0.5 border-b border-gray-200 uppercase text-[10px] tracking-wider"
           >
             {maanden[m]}
           </div>
-          {#each verjaardagen[m] as jarige}
+          {#each verjaardagen[m] as jarige (jarige.naam)}
             <div class="flex leading-none py-[1px]">
               <span class="w-[20px] shrink-0 font-medium text-gray-500">{jarige.dag}</span>
               <span class="truncate">{jarige.naam}</span>
@@ -142,7 +142,7 @@
     <div class="flex gap-[20mm] mt-[10mm] text-[10pt]">
       <div class="flex-1 flex flex-col gap-1">
         <h3 class="font-bold text-lg mb-4 border-b border-gray-300 pb-1">Bachelor</h3>
-        {#each bachelors as s}
+        {#each bachelors as s (s.id)}
           <div class="flex items-baseline leading-snug">
             <span class="font-bold w-[60px] shrink-0">{s.code}</span>
             <span>{s.naam}</span>
@@ -151,7 +151,7 @@
       </div>
       <div class="flex-1 flex flex-col gap-1">
         <h3 class="font-bold text-lg mb-4 border-b border-gray-300 pb-1">Master</h3>
-        {#each masters as s}
+        {#each masters as s (s.id)}
           <div class="flex items-baseline leading-snug">
             <span class="font-bold w-[60px] shrink-0">{s.code}</span>
             <span>{s.naam}</span>
@@ -161,16 +161,16 @@
     </div>
   </section>
 
-  {#each categorieen as categorie}
+  {#each categorieen as categorie (categorie.naam)}
     {#if categorie.data.length > 0}
-      {#each chunkArray(categorie.data, 8) as paginaLeden}
+      {#each chunkArray(categorie.data, 8) as paginaLeden (paginaLeden[0].id)}
         {@const rijen = chunkArray(paginaLeden, 2)}
         <section class="h-[297mm] w-full p-[10mm_15mm] overflow-hidden break-after-page">
           <h2 class="text-5xl century-gothic-italic-bold text-center my-8">{categorie.naam}</h2>
           <div class="flex flex-col gap-[5mm] mt-[5mm]">
-            {#each rijen as rijLeden, rijIndex}
+            {#each rijen as rijLeden, rijIndex (rijIndex)}
               <div class="grid grid-cols-2 gap-[15mm]">
-                {#each rijLeden as lid}
+                {#each rijLeden as lid (lid.id)}
                   <div class="flex break-inside-avoid">
                     <div class="w-[35mm] h-[45mm] bg-gray-200 mr-2.5 shrink-0 overflow-hidden">
                       {#if lid.foto}
@@ -212,7 +212,7 @@
     <section class="min-h-[297mm] w-full p-[10mm_15mm] break-after-page">
       <h2 class="text-5xl century-gothic-italic-bold text-center my-8">Reünisten</h2>
       <div class="columns-2 gap-[10mm]">
-        {#each reunistenZonderFoto as lid}
+        {#each reunistenZonderFoto as lid (lid.id)}
           <div class="mb-4 break-inside-avoid">
             <div class="font-bold">{lid.naam}</div>
             <div>{formatDate(lid.geboortedatum)}</div>
