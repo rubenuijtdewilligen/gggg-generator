@@ -1,11 +1,13 @@
 import PocketBase from 'pocketbase';
-import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
-import { POCKETBASE_EMAIL, POCKETBASE_PASSWORD } from '$env/static/private';
+import { env as publicEnv } from '$env/dynamic/public';
+import { env as privateEnv } from '$env/dynamic/private';
 
-const pb = new PocketBase(PUBLIC_POCKETBASE_URL);
+const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
 
 export async function load() {
-  await pb.collection('_superusers').authWithPassword(POCKETBASE_EMAIL, POCKETBASE_PASSWORD);
+  await pb
+    .collection('_superusers')
+    .authWithPassword(privateEnv.POCKETBASE_EMAIL, privateEnv.POCKETBASE_PASSWORD);
   const [personen, besturen, configs, studies] = await Promise.all([
     pb.collection('personen').getFullList({
       sort: 'naam',

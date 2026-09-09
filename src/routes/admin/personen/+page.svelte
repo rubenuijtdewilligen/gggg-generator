@@ -1,13 +1,13 @@
 <script>
   import { enhance } from '$app/forms';
-  import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
+  import { env as publicEnv } from '$env/dynamic/public';
   import PocketBase from 'pocketbase';
 
   export let data;
   let bewerkLid = null;
   let lidOmTeVerwijderen = null;
 
-  const pb = new PocketBase(PUBLIC_POCKETBASE_URL);
+  const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
 </script>
 
 <main class="p-8 max-w-6xl mx-auto font-sans">

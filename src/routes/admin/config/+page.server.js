@@ -1,12 +1,12 @@
 import PocketBase from 'pocketbase';
-import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
-import { POCKETBASE_EMAIL, POCKETBASE_PASSWORD } from '$env/static/private';
+import { env as publicEnv } from '$env/dynamic/public';
+import { env as privateEnv } from '$env/dynamic/private';
 
-const pb = new PocketBase(PUBLIC_POCKETBASE_URL);
+const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
 
 async function authenticate() {
   if (!pb.authStore.isValid) {
-    await pb.admins.authWithPassword(POCKETBASE_EMAIL, POCKETBASE_PASSWORD);
+    await pb.admins.authWithPassword(privateEnv.POCKETBASE_EMAIL, privateEnv.POCKETBASE_PASSWORD);
   }
 }
 

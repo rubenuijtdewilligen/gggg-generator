@@ -1,10 +1,10 @@
 <script>
   import { enhance } from '$app/forms';
-  import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
+  import { env as publicEnv } from '$env/dynamic/public';
   import PocketBase from 'pocketbase';
 
   export let data;
-  const pb = new PocketBase(PUBLIC_POCKETBASE_URL);
+  const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
 
   let bestuur = data.bestuur || { naam: '', jaar: '', leden_json: [] };
   let ledenLijst = bestuur.leden_json || [];

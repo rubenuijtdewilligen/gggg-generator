@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import 'dotenv/config.js';
 
-const pb = new PocketBase(process.env.PUBLIC_POCKETBASE_URL);
+const pb = new PocketBase(process.env.publicEnv.PUBLIC_POCKETBASE_URL);
 
 function getFile(relativeUrl) {
   if (!relativeUrl) return null;
