@@ -39,7 +39,7 @@
               <div class="w-10 h-10 bg-gray-100 rounded-full overflow-hidden border">
                 {#if p.foto}
                   <img
-                    src={pb.files.getUrl(p, p.foto, { thumb: '100x100' })}
+                    src={pb.files.getURL(p, p.foto, { thumb: '100x100' })}
                     alt=""
                     class="w-full h-full object-cover"
                   />
@@ -226,7 +226,7 @@
               <div class="flex items-center gap-4 mt-2">
                 {#if bewerkLid.foto}
                   <img
-                    src={pb.files.getUrl(bewerkLid, bewerkLid.foto)}
+                    src={pb.files.getURL(bewerkLid, bewerkLid.foto)}
                     alt=""
                     class="w-16 h-16 rounded border object-cover"
                   />

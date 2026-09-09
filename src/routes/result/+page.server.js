@@ -24,7 +24,7 @@ export async function load() {
   };
   const bestuur = besturen[0];
 
-  const getFileUrl = (record, filename) => (filename ? pb.files.getUrl(record, filename) : null);
+  const getFileUrl = (record, filename) => (filename ? pb.files.getURL(record, filename) : null);
 
   return {
     config,

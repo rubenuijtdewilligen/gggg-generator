@@ -58,7 +58,7 @@
       <div class="flex flex-col items-left gap-4">
         {#if bestuur.foto}
           <img
-            src={pb.files.getUrl(bestuur, bestuur.foto)}
+            src={pb.files.getURL(bestuur, bestuur.foto)}
             alt="Huidig"
             class="w-64 h-40 object-cover rounded border shadow-sm"
           />
