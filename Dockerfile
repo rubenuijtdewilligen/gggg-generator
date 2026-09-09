@@ -2,6 +2,8 @@ FROM node:lts-alpine AS sk-build
 WORKDIR /usr/src/app
 
 ARG TZ=Europe/Amsterdam
+ARG PUBLIC_POCKETBASE_URL="https://bsg-gggg-pb.c.rbnu.nl"
+ENV PUBLIC_POCKETBASE_URL=$PUBLIC_POCKETBASE_URL
 
 COPY . /usr/src/app
 RUN apk --no-cache add curl tzdata
