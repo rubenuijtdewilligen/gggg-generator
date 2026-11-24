@@ -9,3 +9,16 @@ export async function createAdminPb() {
     .authWithPassword(privateEnv.POCKETBASE_EMAIL, privateEnv.POCKETBASE_PASSWORD);
   return pb;
 }
+
+export function extractPbError(err, fallback = 'Er is een fout opgetreden.') {
+  const fieldErrors = err?.response?.data;
+  if (fieldErrors && typeof fieldErrors === 'object') {
+    const messages = Object.entries(fieldErrors)
+      .map(([field, info]) => `${field}: ${info?.message || 'ongeldige waarde'}`)
+      .filter(Boolean);
+    if (messages.length > 0) {
+      return messages.join(' | ');
+    }
+  }
+  return err?.message || fallback;
+}

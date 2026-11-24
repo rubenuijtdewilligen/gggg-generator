@@ -29,7 +29,7 @@ Deze to-do lijst is gegenereerd door Mistral Medium 3.5.
 
 ## 4. Hygiëne & DevOps
 
-- [ ] **`console.error('PB Error:', err.data)` enige logging:** Fouten uit actions worden alleen in de serverconsole gedumpt en de gebruiker krijgt een vage `{ success: false }` zonder foutmelding in de UI. Toon de foutmelding (bijv. "Naam is verplicht") in het formulier.
+- [x] **`console.error('PB Error:', err.data)` enige logging:** Fouten uit actions worden alleen in de serverconsole gedumpt en de gebruiker krijgt een vage `{ success: false }` zonder foutmelding in de UI. Toon de foutmelding (bijv. "Naam is verplicht") in het formulier.
 - [x] **`pocketbase` in devDependencies:** Runtime-dependency van de server — hoort in `dependencies` (deploy zonder devdeps breekt).
 - [x] **`@sveltejs/adapter-auto` ongebruikt:** `svelte.config.js` gebruikt `adapter-node`; verwijderen uit devDependencies.
 - [x] **Svelte 4-syntax:** `export let data`, `on:click`, `<slot>` op Svelte 5 — migreren naar runes is hier optioneel maar klein genoeg om in één keer te doen.

@@ -1,5 +1,6 @@
 import { fail } from '@sveltejs/kit';
 import { validateConfigForm } from '$lib/server/validation';
+import { extractPbError } from '$lib/server/pocketbase.js';
 
 export async function load({ locals }) {
   const configs = await locals.pb.collection('config').getFullList();
@@ -26,7 +27,7 @@ export const actions = {
       return { success: true };
     } catch (err) {
       console.error('PB Error:', err.data);
-      return fail(400, { success: false, error: err.message });
+      return fail(400, { success: false, error: extractPbError(err) });
     }
   }
 };
