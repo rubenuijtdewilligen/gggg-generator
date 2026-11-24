@@ -1,19 +1,5 @@
-import PocketBase from 'pocketbase';
-import { env as publicEnv } from '$env/dynamic/public';
-import { env as privateEnv } from '$env/dynamic/private';
-
-const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
-
-async function authenticate() {
-  if (!pb.authStore.isValid) {
-    await pb.admins.authWithPassword(privateEnv.POCKETBASE_EMAIL, privateEnv.POCKETBASE_PASSWORD);
-  }
-}
-
-export async function load() {
-  await authenticate();
-
-  const configs = await pb.collection('config').getFullList();
+export async function load({ locals }) {
+  const configs = await locals.pb.collection('config').getFullList();
 
   return {
     config: configs[0] ? JSON.parse(JSON.stringify(configs[0])) : null
@@ -21,16 +7,15 @@ export async function load() {
 }
 
 export const actions = {
-  save: async ({ request }) => {
-    await authenticate();
+  save: async ({ request, locals }) => {
     const formData = await request.formData();
     const id = formData.get('id');
 
     try {
       if (id) {
-        await pb.collection('config').update(id, formData);
+        await locals.pb.collection('config').update(id, formData);
       } else {
-        await pb.collection('config').create(formData);
+        await locals.pb.collection('config').create(formData);
       }
       return { success: true };
     } catch (err) {

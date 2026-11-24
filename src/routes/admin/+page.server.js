@@ -1,22 +1,8 @@
-import PocketBase from 'pocketbase';
-import { env as publicEnv } from '$env/dynamic/public';
-import { env as privateEnv } from '$env/dynamic/private';
-
-const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
-
-async function authenticate() {
-  if (!pb.authStore.isValid) {
-    await pb.admins.authWithPassword(privateEnv.POCKETBASE_EMAIL, privateEnv.POCKETBASE_PASSWORD);
-  }
-}
-
-export async function load() {
-  await authenticate();
-
+export async function load({ locals }) {
   const [personen, besturen, studies] = await Promise.all([
-    pb.collection('personen').getFullList(),
-    pb.collection('bestuur').getFullList({ sort: '-created', limit: 1 }),
-    pb.collection('studies').getFullList()
+    locals.pb.collection('personen').getFullList(),
+    locals.pb.collection('bestuur').getFullList({ sort: '-created', limit: 1 }),
+    locals.pb.collection('studies').getFullList()
   ]);
 
   const stats = {

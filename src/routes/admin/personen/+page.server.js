@@ -1,21 +1,7 @@
-import PocketBase from 'pocketbase';
-import { env as publicEnv } from '$env/dynamic/public';
-import { env as privateEnv } from '$env/dynamic/private';
-
-const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
-
-async function authenticate() {
-  if (!pb.authStore.isValid) {
-    await pb.admins.authWithPassword(privateEnv.POCKETBASE_EMAIL, privateEnv.POCKETBASE_PASSWORD);
-  }
-}
-
-export async function load() {
-  await authenticate();
-
+export async function load({ locals }) {
   const [personen, studies] = await Promise.all([
-    pb.collection('personen').getFullList({ sort: 'naam', expand: 'studie' }),
-    pb.collection('studies').getFullList({ sort: 'code' })
+    locals.pb.collection('personen').getFullList({ sort: 'naam', expand: 'studie' }),
+    locals.pb.collection('studies').getFullList({ sort: 'code' })
   ]);
 
   return {
@@ -25,8 +11,7 @@ export async function load() {
 }
 
 export const actions = {
-  save: async ({ request }) => {
-    await authenticate();
+  save: async ({ request, locals }) => {
     const formData = await request.formData();
     const id = formData.get('id');
 
@@ -37,9 +22,9 @@ export const actions = {
 
     try {
       if (id) {
-        await pb.collection('personen').update(id, formData);
+        await locals.pb.collection('personen').update(id, formData);
       } else {
-        await pb.collection('personen').create(formData);
+        await locals.pb.collection('personen').create(formData);
       }
       return { success: true };
     } catch (err) {
@@ -47,10 +32,9 @@ export const actions = {
       return { success: false, error: err.message };
     }
   },
-  delete: async ({ request }) => {
-    await authenticate();
+  delete: async ({ request, locals }) => {
     const id = (await request.formData()).get('id');
-    await pb.collection('personen').delete(id);
+    await locals.pb.collection('personen').delete(id);
     return { success: true };
   }
 };

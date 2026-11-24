@@ -1,21 +1,12 @@
-import PocketBase from 'pocketbase';
-import { env as publicEnv } from '$env/dynamic/public';
-import { env as privateEnv } from '$env/dynamic/private';
-
-const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
-
-export async function load() {
-  await pb
-    .collection('_superusers')
-    .authWithPassword(privateEnv.POCKETBASE_EMAIL, privateEnv.POCKETBASE_PASSWORD);
+export async function load({ locals }) {
   const [personen, besturen, configs, studies] = await Promise.all([
-    pb.collection('personen').getFullList({
+    locals.pb.collection('personen').getFullList({
       sort: 'naam',
       expand: 'studie'
     }),
-    pb.collection('bestuur').getFullList({ sort: '-created', limit: 1 }),
-    pb.collection('config').getFullList({ limit: 1 }),
-    pb.collection('studies').getFullList({ sort: 'code' })
+    locals.pb.collection('bestuur').getFullList({ sort: '-created', limit: 1 }),
+    locals.pb.collection('config').getFullList({ limit: 1 }),
+    locals.pb.collection('studies').getFullList({ sort: 'code' })
   ]);
 
   const config = configs[0] || {
@@ -26,7 +17,8 @@ export async function load() {
   };
   const bestuur = besturen[0];
 
-  const getFileUrl = (record, filename) => (filename ? pb.files.getURL(record, filename) : null);
+  const getFileUrl = (record, filename) =>
+    filename ? locals.pb.files.getURL(record, filename) : null;
 
   return {
     config,
