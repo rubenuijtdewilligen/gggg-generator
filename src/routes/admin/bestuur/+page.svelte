@@ -6,7 +6,7 @@
   export let data;
   const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
 
-  let bestuur = data.bestuur || { naam: '', jaar: '', leden_json: [] };
+  let bestuur = data.bestuur || { naam: '', leden_json: [] };
 
   let ledenLijst = (() => {
     const raw = bestuur?.leden_json;

@@ -153,7 +153,6 @@ async function importData() {
     });
 
     const bestuurData = new FormData();
-    bestuurData.append('jaar', data.config.jaren);
     bestuurData.append('naam', data.bestuur.naam);
     bestuurData.append('leden_json', JSON.stringify(gekoppeldeBestuursleden));
 
