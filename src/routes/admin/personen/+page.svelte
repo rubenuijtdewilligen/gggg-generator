@@ -6,6 +6,7 @@
   export let data;
   let bewerkLid = null;
   let lidOmTeVerwijderen = null;
+  let deleteError = '';
 
   const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
 </script>
@@ -99,10 +100,19 @@
           Dit kan niet ongedaan worden gemaakt.
         </p>
 
+        {#if deleteError}
+          <p class="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-200">
+            {deleteError}
+          </p>
+        {/if}
+
         <div class="flex gap-3">
           <button
             type="button"
-            on:click={() => (lidOmTeVerwijderen = null)}
+            on:click={() => {
+              deleteError = '';
+              lidOmTeVerwijderen = null;
+            }}
             class="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50 transition"
           >
             Annuleren
@@ -111,14 +121,14 @@
           <form
             method="POST"
             action="?/delete"
-            use:enhance={({ formData }) => {
-              const id = formData.get('id');
-              data.personen = data.personen.filter((p) => p.id !== id);
-              lidOmTeVerwijderen = null;
-
+            use:enhance={() => {
+              deleteError = '';
               return async ({ result, update }) => {
-                if (result.type !== 'success') {
+                if (result.type === 'success') {
+                  lidOmTeVerwijderen = null;
                   await update();
+                } else {
+                  deleteError = result.data?.error || 'Verwijderen mislukt. Probeer het opnieuw.';
                 }
               };
             }}

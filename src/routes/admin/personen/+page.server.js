@@ -1,3 +1,5 @@
+import { fail } from '@sveltejs/kit';
+
 export async function load({ locals }) {
   const [personen, studies] = await Promise.all([
     locals.pb.collection('personen').getFullList({ sort: 'naam', expand: 'studie' }),
@@ -32,9 +34,16 @@ export const actions = {
       return { success: false, error: err.message };
     }
   },
+
   delete: async ({ request, locals }) => {
     const id = (await request.formData()).get('id');
-    await locals.pb.collection('personen').delete(id);
-    return { success: true };
+
+    try {
+      await locals.pb.collection('personen').delete(id);
+      return { success: true };
+    } catch (err) {
+      console.error('PB Error:', err.data);
+      return fail(400, { success: false, error: 'Verwijderen mislukt.' });
+    }
   }
 };
