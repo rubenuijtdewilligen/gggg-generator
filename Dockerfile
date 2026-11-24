@@ -1,25 +1,33 @@
-FROM node:lts-alpine AS sk-build
-WORKDIR /usr/src/app
+# Build stage
+FROM node:22-alpine AS builder
 
-ARG TZ=Europe/Amsterdam
+WORKDIR /app
 
-COPY . /usr/src/app
-RUN apk --no-cache add curl tzdata
-RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN npm install
-RUN npm run build
+COPY package.json package-lock.json ./
+RUN npm ci
 
-FROM node:lts-alpine
-WORKDIR /usr/src/app
+COPY . .
+RUN PUBLIC_POCKETBASE_URL=http://127.0.0.1:8090 \
+    POCKETBASE_EMAIL=build@example.com \
+    POCKETBASE_PASSWORD=build-dummy-password \
+    npm run build && \
+    npm prune --omit=dev
 
-ARG TZ=Europe/Amsterdam
-RUN apk --no-cache add curl tzdata
-RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# Runtime stage
+FROM node:22-alpine AS runner
 
-COPY --from=sk-build /usr/src/app/package.json /usr/src/app/package.json
-COPY --from=sk-build /usr/src/app/package-lock.json /usr/src/app/package-lock.json
+WORKDIR /app
 
-COPY --from=sk-build /usr/src/app/build /usr/src/app/build
+RUN apk add --no-cache tzdata curl
+
+ENV TZ=Europe/Amsterdam
+ENV NODE_ENV=production
+ENV PORT=3000
+
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
 EXPOSE 3000
+
 CMD ["node", "build/index.js"]
