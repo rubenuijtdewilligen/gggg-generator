@@ -7,6 +7,7 @@
   let bewerkLid = null;
   let lidOmTeVerwijderen = null;
   let deleteError = '';
+  let saveError = '';
 
   const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
 </script>
@@ -15,7 +16,10 @@
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-3xl font-bold">Personenbeheer</h1>
     <button
-      on:click={() => (bewerkLid = { status: 'lid' })}
+      on:click={() => {
+        saveError = '';
+        bewerkLid = { status: 'lid' };
+      }}
       class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-lg"
     >
       + Nieuw Persoon
@@ -54,11 +58,18 @@
             >
             <td class="p-4 text-gray-500">{p.expand?.studie?.code || '-'}</td>
             <td class="p-4 text-right space-x-3">
-              <button on:click={() => (bewerkLid = p)} class="text-blue-600 hover:underline"
-                >Bewerk</button
+              <button
+                on:click={() => {
+                  saveError = '';
+                  bewerkLid = p;
+                }}
+                class="text-blue-600 hover:underline">Bewerk</button
               >
               <button
-                on:click={() => (lidOmTeVerwijderen = p)}
+                on:click={() => {
+                  deleteError = '';
+                  lidOmTeVerwijderen = p;
+                }}
                 class="text-red-400 hover:text-red-600"
               >
                 Verwijder
@@ -155,10 +166,13 @@
         method="POST"
         action="?/save"
         use:enhance={() => {
+          saveError = '';
           return async ({ result, update }) => {
             if (result.type === 'success') {
               bewerkLid = null;
               await update();
+            } else {
+              saveError = result.data?.error || 'Opslaan mislukt. Controleer de invoer.';
             }
           };
         }}
@@ -169,10 +183,19 @@
           <h2 class="text-2xl font-bold">{bewerkLid.id ? 'Persoon Bewerken' : 'Nieuw Persoon'}</h2>
           <button
             type="button"
-            on:click={() => (bewerkLid = null)}
+            on:click={() => {
+              saveError = '';
+              bewerkLid = null;
+            }}
             class="text-gray-400 hover:text-black text-2xl">&times;</button
           >
         </div>
+
+        {#if saveError}
+          <div class="mb-6 p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-200">
+            {saveError}
+          </div>
+        {/if}
 
         {#if bewerkLid.id}<input type="hidden" name="id" value={bewerkLid.id} />{/if}
 
@@ -226,6 +249,8 @@
               <input
                 name="geboortedatum"
                 value={bewerkLid.geboortedatum ?? ''}
+                pattern={'[0-9]{2}-[0-9]{2}-[0-9]{4}'}
+                title="Gebruik het formaat DD-MM-YYYY (bijv. 04-03-2005)"
                 class="w-full border rounded-lg p-2.5 mt-1"
                 placeholder="DD-MM-YYYY"
               />
@@ -306,7 +331,10 @@
         <div class="mt-8 flex justify-end gap-3 border-t pt-6">
           <button
             type="button"
-            on:click={() => (bewerkLid = null)}
+            on:click={() => {
+              saveError = '';
+              bewerkLid = null;
+            }}
             class="px-6 py-2 text-gray-500 hover:text-black transition">Annuleren</button
           >
           <button

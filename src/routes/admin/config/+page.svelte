@@ -11,6 +11,7 @@
   };
 
   let successMessage = false;
+  let saveError = '';
 </script>
 
 <main class="p-8 max-w-2xl mx-auto font-sans">
@@ -30,15 +31,28 @@
     </div>
   {/if}
 
+  {#if saveError}
+    <div
+      class="mb-6 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 flex justify-between items-center"
+    >
+      <span>{saveError}</span>
+      <button on:click={() => (saveError = '')} class="text-red-900 font-bold">&times;</button>
+    </div>
+  {/if}
+
   <form
     method="POST"
     action="?/save"
     use:enhance={() => {
+      saveError = '';
+      successMessage = false;
       return async ({ result, update }) => {
-        await update({ reset: false });
         if (result.type === 'success') {
+          await update({ reset: false });
           successMessage = true;
           setTimeout(() => (successMessage = false), 3000);
+        } else {
+          saveError = result.data?.error || 'Opslaan mislukt. Controleer de invoer.';
         }
       };
     }}

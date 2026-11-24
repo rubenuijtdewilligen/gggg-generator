@@ -1,4 +1,5 @@
 import { fail } from '@sveltejs/kit';
+import { validateStudieForm } from '$lib/server/validation';
 
 export async function load({ locals }) {
   const studies = await locals.pb.collection('studies').getFullList({ sort: 'code' });
@@ -13,15 +14,19 @@ export const actions = {
     const formData = await request.formData();
     const id = formData.get('id');
 
+    const { payload, error } = validateStudieForm(formData);
+    if (error) return fail(400, { success: false, error });
+
     try {
       if (id) {
-        await locals.pb.collection('studies').update(id, formData);
+        await locals.pb.collection('studies').update(id, payload);
       } else {
-        await locals.pb.collection('studies').create(formData);
+        await locals.pb.collection('studies').create(payload);
       }
       return { success: true };
     } catch (err) {
-      return { success: false, error: err.message };
+      console.error('PB Error:', err.data);
+      return fail(400, { success: false, error: err.message });
     }
   },
 

@@ -4,6 +4,8 @@
   export let data;
   let bewerkStudie = null;
   let studieOmTeVerwijderen = null;
+  let deleteError = '';
+  let saveError = '';
 </script>
 
 <main class="p-8 max-w-4xl mx-auto font-sans">
@@ -15,7 +17,10 @@
       </p>
     </div>
     <button
-      on:click={() => (bewerkStudie = { code: '', naam: '' })}
+      on:click={() => {
+        saveError = '';
+        bewerkStudie = { code: '', naam: '' };
+      }}
       class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-lg"
     >
       + Nieuwe Studie
@@ -37,11 +42,18 @@
             <td class="p-4 font-mono font-bold text-blue-600">{s.code}</td>
             <td class="p-4">{s.naam}</td>
             <td class="p-4 text-right space-x-3">
-              <button on:click={() => (bewerkStudie = s)} class="text-blue-600 hover:underline"
-                >Bewerk</button
+              <button
+                on:click={() => {
+                  saveError = '';
+                  bewerkStudie = s;
+                }}
+                class="text-blue-600 hover:underline">Bewerk</button
               >
               <button
-                on:click={() => (studieOmTeVerwijderen = s)}
+                on:click={() => {
+                  deleteError = '';
+                  studieOmTeVerwijderen = s;
+                }}
                 class="text-red-400 hover:text-red-600"
               >
                 Verwijder
@@ -63,18 +75,33 @@
           Weet je zeker dat je <strong>{studieOmTeVerwijderen.code}</strong> wilt verwijderen? Leden die
           deze studie hebben, verliezen deze koppeling.
         </p>
+
+        {#if deleteError}
+          <p class="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-200">
+            {deleteError}
+          </p>
+        {/if}
+
         <div class="flex gap-3">
           <button
-            on:click={() => (studieOmTeVerwijderen = null)}
+            on:click={() => {
+              deleteError = '';
+              studieOmTeVerwijderen = null;
+            }}
             class="flex-1 px-4 py-2 border rounded-lg">Annuleren</button
           >
           <form
             method="POST"
             action="?/delete"
             use:enhance={() => {
-              return async ({ update }) => {
-                studieOmTeVerwijderen = null;
-                await update();
+              deleteError = '';
+              return async ({ result, update }) => {
+                if (result.type === 'success') {
+                  studieOmTeVerwijderen = null;
+                  await update();
+                } else {
+                  deleteError = result.data?.error || 'Verwijderen mislukt. Probeer het opnieuw.';
+                }
               };
             }}
             class="flex-1"
@@ -99,10 +126,13 @@
         method="POST"
         action="?/save"
         use:enhance={() => {
+          saveError = '';
           return async ({ result, update }) => {
             if (result.type === 'success') {
               bewerkStudie = null;
               await update();
+            } else {
+              saveError = result.data?.error || 'Opslaan mislukt. Controleer de invoer.';
             }
           };
         }}
@@ -111,6 +141,12 @@
         <h2 class="text-2xl font-bold mb-6">
           {bewerkStudie.id ? 'Studie Bewerken' : 'Nieuwe Studie'}
         </h2>
+
+        {#if saveError}
+          <div class="mb-4 p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-200">
+            {saveError}
+          </div>
+        {/if}
 
         {#if bewerkStudie.id}<input type="hidden" name="id" value={bewerkStudie.id} />{/if}
 
@@ -144,7 +180,10 @@
         <div class="mt-8 flex justify-end gap-3 border-t pt-6">
           <button
             type="button"
-            on:click={() => (bewerkStudie = null)}
+            on:click={() => {
+              saveError = '';
+              bewerkStudie = null;
+            }}
             class="px-6 py-2 text-gray-500">Annuleren</button
           >
           <button

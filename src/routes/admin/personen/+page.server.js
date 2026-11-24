@@ -1,4 +1,5 @@
 import { fail } from '@sveltejs/kit';
+import { validatePersoonForm } from '$lib/server/validation';
 
 export async function load({ locals }) {
   const [personen, studies] = await Promise.all([
@@ -17,21 +18,19 @@ export const actions = {
     const formData = await request.formData();
     const id = formData.get('id');
 
-    const foto = formData.get('foto');
-    if (foto instanceof File && foto.size === 0) {
-      formData.delete('foto');
-    }
+    const { payload, error } = validatePersoonForm(formData);
+    if (error) return fail(400, { success: false, error });
 
     try {
       if (id) {
-        await locals.pb.collection('personen').update(id, formData);
+        await locals.pb.collection('personen').update(id, payload);
       } else {
-        await locals.pb.collection('personen').create(formData);
+        await locals.pb.collection('personen').create(payload);
       }
       return { success: true };
     } catch (err) {
       console.error('PB Error:', err.data);
-      return { success: false, error: err.message };
+      return fail(400, { success: false, error: err.message });
     }
   },
 
