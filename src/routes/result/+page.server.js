@@ -22,11 +22,14 @@ export async function load({ locals }) {
     locals.pb.collection('studies').getFullList({ sort: 'code' })
   ]);
 
-  const config = configs[0] || {
-    titel: 'Ledenlijst',
-    jaargang: '',
-    jaren: '',
-    hoofdkleur: '#db1f0d'
+  const rawConfig = configs[0];
+  const isValidHex = /^#[0-9a-fA-F]{6}$/.test(rawConfig?.hoofdkleur || '');
+
+  const config = {
+    titel: rawConfig?.titel || 'Ledenlijst',
+    jaargang: rawConfig?.jaargang || '',
+    jaren: rawConfig?.jaren || '',
+    hoofdkleur: isValidHex ? rawConfig.hoofdkleur : '#db1f0d'
   };
   const bestuur = besturen[0] || null;
 
