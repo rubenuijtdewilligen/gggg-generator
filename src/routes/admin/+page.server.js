@@ -13,8 +13,30 @@ export async function load({ locals }) {
     studies: studies.length
   };
 
+  const rawBestuur = besturen[0] || null;
+  let huidigBestuur = null;
+
+  if (rawBestuur) {
+    const rawLeden =
+      typeof rawBestuur.leden_json === 'string' && rawBestuur.leden_json.trim() !== ''
+        ? JSON.parse(rawBestuur.leden_json)
+        : Array.isArray(rawBestuur.leden_json)
+          ? rawBestuur.leden_json
+          : [];
+
+    const personenById = new Map(personen.map((p) => [p.id, p]));
+
+    huidigBestuur = {
+      ...rawBestuur,
+      leden: rawLeden.map((lid) => ({
+        rol: lid.rol || '',
+        naam: personenById.get(lid.persoonId)?.naam || lid.naam || 'Onbekend'
+      }))
+    };
+  }
+
   return {
     stats,
-    huidigBestuur: besturen[0] || null
+    huidigBestuur
   };
 }

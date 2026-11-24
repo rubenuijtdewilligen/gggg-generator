@@ -33,6 +33,9 @@ export async function load({ locals }) {
   const getFileUrl = (record, filename) =>
     record && filename ? locals.pb.files.getURL(record, filename) : null;
 
+  const personenById = new Map(personen.map((p) => [p.id, p]));
+  const rawLeden = bestuur ? parseLedenJson(bestuur.leden_json) : [];
+
   return {
     config,
     bestuur: bestuur
@@ -40,7 +43,11 @@ export async function load({ locals }) {
           ...bestuur,
           naam: bestuur.naam || 'Bestuur',
           foto: getFileUrl(bestuur, bestuur.foto),
-          leden: parseLedenJson(bestuur.leden_json)
+          leden: rawLeden.map((lid) => ({
+            rol: lid.rol || '',
+            persoonId: lid.persoonId || null,
+            naam: personenById.get(lid.persoonId)?.naam || lid.naam || 'Onbekend'
+          }))
         }
       : {
           naam: '',

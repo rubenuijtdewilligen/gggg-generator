@@ -7,21 +7,38 @@
   const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
 
   let bestuur = data.bestuur || { naam: '', jaar: '', leden_json: [] };
+
   let ledenLijst = (() => {
     const raw = bestuur?.leden_json;
-    if (Array.isArray(raw)) return raw;
-    if (typeof raw === 'string' && raw.trim() !== '') {
+    let parsed = [];
+    if (Array.isArray(raw)) {
+      parsed = raw;
+    } else if (typeof raw === 'string' && raw.trim() !== '') {
       try {
-        return JSON.parse(raw);
+        parsed = JSON.parse(raw);
       } catch {
-        return [];
+        parsed = [];
       }
     }
-    return [];
+
+    return parsed.map((lid) => {
+      if (lid.persoonId) {
+        return { rol: lid.rol || '', persoonId: lid.persoonId };
+      }
+      // Fallback for old { rol, naam } data
+      const match = data.personen.find(
+        (p) => p.naam.trim().toLowerCase() === (lid.naam || '').trim().toLowerCase()
+      );
+      return {
+        rol: lid.rol || '',
+        persoonId: match ? match.id : '',
+        legacyNaam: match ? '' : lid.naam || ''
+      };
+    });
   })();
 
   function voegLidToe() {
-    ledenLijst = [...ledenLijst, { rol: '', naam: '' }];
+    ledenLijst = [...ledenLijst, { rol: '', persoonId: '' }];
   }
 
   function verwijderLid(index) {
@@ -38,7 +55,10 @@
     method="POST"
     action="?/save"
     use:enhance={({ formData }) => {
-      formData.set('leden_json', JSON.stringify(ledenLijst));
+      const schoneLijst = ledenLijst
+        .filter((l) => l.rol.trim() || l.persoonId)
+        .map(({ rol, persoonId }) => ({ rol, persoonId }));
+      formData.set('leden_json', JSON.stringify(schoneLijst));
 
       return async ({ update }) => {
         await update({ reset: false });
@@ -103,14 +123,23 @@
             <input
               bind:value={lid.rol}
               placeholder="Rol"
+              required
               class="flex-1 border rounded-lg p-2 text-sm"
             />
-            <input
-              list="personen-namen"
-              bind:value={lid.naam}
-              placeholder="Naam"
-              class="flex-[2] border rounded-lg p-2 text-sm"
-            />
+            <select
+              bind:value={lid.persoonId}
+              required
+              class="flex-[2] border rounded-lg p-2 text-sm bg-white"
+            >
+              <option value="" disabled>
+                {lid.legacyNaam
+                  ? `Kies persoon (was: ${lid.legacyNaam})`
+                  : 'Selecteer een persoon...'}
+              </option>
+              {#each data.personen as p (p.id)}
+                <option value={p.id}>{p.naam}</option>
+              {/each}
+            </select>
             <button
               type="button"
               on:click={() => verwijderLid(i)}
@@ -120,12 +149,6 @@
             </button>
           </div>
         {/each}
-
-        <datalist id="personen-namen">
-          {#each data.personen as p (p.naam)}
-            <option value={p.naam}></option>
-          {/each}
-        </datalist>
 
         {#if ledenLijst.length === 0}
           <p
