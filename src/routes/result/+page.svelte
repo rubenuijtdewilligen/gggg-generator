@@ -61,6 +61,17 @@
   const masters = data.studiesList.filter((s) => s.code.toUpperCase().startsWith('M'));
 </script>
 
+<div class="fixed bottom-6 right-6 z-50 print:hidden">
+  <button
+    type="button"
+    on:click={() => window.print()}
+    class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl shadow-xl transition cursor-pointer flex items-center gap-2"
+  >
+    <span>🖨️</span>
+    <span>Print / Opslaan als PDF</span>
+  </button>
+</div>
+
 <div
   class="w-[210mm] mx-auto bg-white font-sans text-xs"
   style="--primary-color: {data.config.hoofdkleur};"
