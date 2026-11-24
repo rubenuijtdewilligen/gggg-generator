@@ -38,4 +38,4 @@ Deze to-do lijst is gegenereerd door Mistral Medium 3.5.
 - [ ] **Geen `.dockerignore`:** `COPY . /usr/src/app` neemt `.env` (met PB-superuser-credentials!) en `node_modules` mee in de build. Direct toevoegen.
 - [ ] **`npm install` i.p.v. `npm ci`:** In de Dockerfile; en pin `node:lts-alpine` op een vaste versie.
 - [ ] **README aanvullen:** Documenteer de env-variabelen (`POCKETBASE_EMAIL/PASSWORD` zijn superuser-credentials — noem expliciet dat ze geheim moeten blijven) en hoe `json_to_pb.js` werkt.
-- [ ] **robots.txt:** De app bevat leden-PII achter CapRover-auth, maar `/result` is server-side open zonder app-auth. Overweeg `Disallow: /` — deze tool hoeft niet geïndexeerd te worden.
+- [x] **robots.txt:** De app bevat leden-PII achter CapRover-auth, maar `/result` is server-side open zonder app-auth. Overweeg `Disallow: /` — deze tool hoeft niet geïndexeerd te worden.
