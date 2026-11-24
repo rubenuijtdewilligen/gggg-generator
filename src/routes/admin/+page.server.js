@@ -1,3 +1,5 @@
+import { isValidDutchDate } from '$lib/date.js';
+
 export async function load({ locals }) {
   const [personen, besturen, studies] = await Promise.all([
     locals.pb.collection('personen').getFullList(),
@@ -35,8 +37,13 @@ export async function load({ locals }) {
     };
   }
 
+  const ongeldigeVerjaardagen = personen
+    .filter((p) => p.geboortedatum && !isValidDutchDate(p.geboortedatum))
+    .map((p) => ({ id: p.id, naam: p.naam, geboortedatum: p.geboortedatum }));
+
   return {
     stats,
-    huidigBestuur
+    huidigBestuur,
+    ongeldigeVerjaardagen
   };
 }

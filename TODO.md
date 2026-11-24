@@ -21,7 +21,7 @@ Deze to-do lijst is gegenereerd door Mistral Medium 3.5.
 
 ## 3. Gids-generatie (resultaatpagina)
 
-- [ ] **Verjaardagen sorteren alleen op dag:** `verjaardagen[m].sort((a, b) => a.dag - b.dag)` — prima per maand, maar personen zonder geldige datum vallen stil weg; toon een waarschuwing in de admin als iemand een ongeldig formaat heeft.
+- [x] **Verjaardagen sorteren alleen op dag:** `verjaardagen[m].sort((a, b) => a.dag - b.dag)` — prima per maand, maar personen zonder geldige datum vallen stil weg; toon een waarschuwing in de admin als iemand een ongeldig formaat heeft.
 - [ ] **Reünisten-splitsing onverklaarbaar voor de gebruiker:** Reünisten mét foto komen in het fotogrid, zónder foto in een tekstlijst achteraan — dat is nu impliciet gedrag. Beschrijf het in de admin-UI (bijv. een hint bij de reünist-status) zodat de gids-maker snapt welke lijst waar terechtkomt.
 - [ ] **Kleurveld ongevalideerd:** `hoofdkleur` gaat als vrije tekst de DB in; een ongeldige waarde breekt de CSS-variabele (`style="--primary-color: {..}"`). Met `type="color"` in de admin is het gros gedekt, maar valideer server-side op `#RRGGBB`.
 - [ ] **Printflow controleren:** De gids is A4-geprint; check dat `break-after-page` + de `@page`-regels in Chrome én Firefox de pagina's exact op A4-breuk zetten (de lege tweede sectie suggereert handmatige paginatie). Voeg een "Print als PDF"-knop toe i.p.v. reliance op Ctrl+P.

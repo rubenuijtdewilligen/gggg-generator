@@ -53,6 +53,31 @@
     </p>
   </header>
 
+  {#if data.ongeldigeVerjaardagen?.length > 0}
+    <div
+      class="mb-8 p-4 bg-amber-50 border border-amber-300 text-amber-900 rounded-2xl flex items-center justify-between gap-4"
+    >
+      <div>
+        <p class="font-bold text-sm">
+          ⚠️ Let op: {data.ongeldigeVerjaardagen.length}
+          {data.ongeldigeVerjaardagen.length === 1 ? 'persoon heeft' : 'personen hebben'} een ongeldige
+          geboortedatum
+        </p>
+        <p class="text-xs text-amber-800 mt-0.5">
+          Deze personen verschijnen niet op de verjaardagenpagina: {data.ongeldigeVerjaardagen
+            .map((p) => `${p.naam} (${p.geboortedatum})`)
+            .join(', ')}.
+        </p>
+      </div>
+      <a
+        href={resolve('/admin/personen')}
+        class="shrink-0 px-4 py-2 bg-amber-600 text-white text-xs font-bold rounded-lg hover:bg-amber-700 transition"
+      >
+        Controleren →
+      </a>
+    </div>
+  {/if}
+
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
       <span class="text-gray-400 text-sm font-bold uppercase">Leden</span>

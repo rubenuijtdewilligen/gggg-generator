@@ -2,6 +2,7 @@
   import { enhance } from '$app/forms';
   import { env as publicEnv } from '$env/dynamic/public';
   import PocketBase from 'pocketbase';
+  import { isValidDutchDate } from '$lib/date';
 
   export let data;
   let bewerkLid = null;
@@ -10,6 +11,11 @@
   let saveError = '';
 
   const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
+
+  $: ongeldigeDatums = data.personen.filter(
+    (p) => p.geboortedatum && !isValidDutchDate(p.geboortedatum)
+  );
+  $: ontbrekendeDatums = data.personen.filter((p) => !p.geboortedatum);
 </script>
 
 <main class="p-8 max-w-6xl mx-auto font-sans">
@@ -25,6 +31,38 @@
       + Nieuw Persoon
     </button>
   </div>
+
+  {#if ongeldigeDatums.length > 0}
+    <div class="mb-6 p-4 bg-amber-50 border border-amber-300 text-amber-900 rounded-xl text-sm">
+      <p class="font-bold mb-1">
+        ⚠️ {ongeldigeDatums.length}
+        {ongeldigeDatums.length === 1 ? 'persoon heeft' : 'personen hebben'} een ongeldige geboortedatum
+        (valt weg op de verjaardagenpagina):
+      </p>
+      <div class="flex flex-wrap gap-2 mt-2">
+        {#each ongeldigeDatums as p (p.id)}
+          <button
+            type="button"
+            on:click={() => {
+              saveError = '';
+              bewerkLid = p;
+            }}
+            class="px-2.5 py-1 bg-amber-100 hover:bg-amber-200 rounded-md font-medium underline"
+          >
+            {p.naam} ({p.geboortedatum})
+          </button>
+        {/each}
+      </div>
+    </div>
+  {/if}
+
+  {#if ontbrekendeDatums.length > 0}
+    <div class="mb-6 p-3 bg-gray-50 border border-gray-200 text-gray-600 rounded-xl text-xs">
+      ℹ️ {ontbrekendeDatums.length}
+      {ontbrekendeDatums.length === 1 ? 'persoon heeft' : 'personen hebben'} geen ingevulde geboortedatum
+      ({ontbrekendeDatums.map((p) => p.naam).join(', ')}).
+    </div>
+  {/if}
 
   <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
     <table class="w-full text-left">
@@ -51,7 +89,17 @@
                 {/if}
               </div>
             </td>
-            <td class="p-4 font-medium">{p.naam}</td>
+            <td class="p-4 font-medium">
+              {p.naam}
+              {#if p.geboortedatum && !isValidDutchDate(p.geboortedatum)}
+                <span
+                  class="ml-2 px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded"
+                  title="Ongeldige geboortedatum: {p.geboortedatum}"
+                >
+                  ⚠️ Datum: {p.geboortedatum}
+                </span>
+              {/if}
+            </td>
             <td class="p-4"
               ><span class="px-2 py-1 text-xs font-semibold bg-gray-100 rounded">{p.status}</span
               ></td
