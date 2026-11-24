@@ -18,7 +18,7 @@ Deze to-do lijst is gegenereerd door Mistral Medium 3.5.
 - [ ] **Typo's in schemavelden:** `adres_thuisthuis` (i.p.v. `thuishuis`) en in `json_to_pb.js` `process.env.publicEnv.PUBLIC_POCKETBASE_URL` (i.p.v. `process.env.PUBLIC_POCKETBASE_URL`) — het import-script crasht dus meteen bij het opstarten. Fix het script; hernoem het DB-veld alleen als je ook de import/gids-data meeneemt.
 - [ ] **`jaar`-veld bestuur wordt nergens gebruikt:** In het admin-formulier ontbreekt het `jaar`-veld terwijl het schema het kent (alleen het import-script vult het). Voeg het toe aan het formulier of gebruik `config.jaren` consequent.
 - [ ] **Geen unieke indexen:** `studies.code` en `personen.naam` kunnen duplicaten bevatten (dubbele import = alles dubbel). Voeg een unieke index op `studies.code` toe en overweeg die op `personen.naam`.
-- [ ] **Import-script niet idempotent:** `json_to_pb.js` maakt bij elke run alles opnieuw aan — een tweede run verdubbelt de hele database. Laat het script bestaande records upserten of eerst legen (met bevestiging).
+- [x] **Import-script niet idempotent:** `json_to_pb.js` maakt bij elke run alles opnieuw aan — een tweede run verdubbelt de hele database. Laat het script bestaande records upserten of eerst legen (met bevestiging).
 
 ## 3. Gids-generatie (resultaatpagina)
 
