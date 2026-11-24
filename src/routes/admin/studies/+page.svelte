@@ -1,11 +1,11 @@
 <script>
   import { enhance } from '$app/forms';
 
-  export let data;
-  let bewerkStudie = null;
-  let studieOmTeVerwijderen = null;
-  let deleteError = '';
-  let saveError = '';
+  let { data } = $props();
+  let bewerkStudie = $state(null);
+  let studieOmTeVerwijderen = $state(null);
+  let deleteError = $state('');
+  let saveError = $state('');
 </script>
 
 <main class="p-8 max-w-4xl mx-auto font-sans">
@@ -17,7 +17,7 @@
       </p>
     </div>
     <button
-      on:click={() => {
+      onclick={() => {
         saveError = '';
         bewerkStudie = { code: '', naam: '' };
       }}
@@ -43,14 +43,14 @@
             <td class="p-4">{s.naam}</td>
             <td class="p-4 text-right space-x-3">
               <button
-                on:click={() => {
+                onclick={() => {
                   saveError = '';
                   bewerkStudie = s;
                 }}
                 class="text-blue-600 hover:underline">Bewerk</button
               >
               <button
-                on:click={() => {
+                onclick={() => {
                   deleteError = '';
                   studieOmTeVerwijderen = s;
                 }}
@@ -84,7 +84,7 @@
 
         <div class="flex gap-3">
           <button
-            on:click={() => {
+            onclick={() => {
               deleteError = '';
               studieOmTeVerwijderen = null;
             }}
@@ -180,7 +180,7 @@
         <div class="mt-8 flex justify-end gap-3 border-t pt-6">
           <button
             type="button"
-            on:click={() => {
+            onclick={() => {
               saveError = '';
               bewerkStudie = null;
             }}

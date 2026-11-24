@@ -32,7 +32,7 @@ Deze to-do lijst is gegenereerd door Mistral Medium 3.5.
 - [ ] **`console.error('PB Error:', err.data)` enige logging:** Fouten uit actions worden alleen in de serverconsole gedumpt en de gebruiker krijgt een vage `{ success: false }` zonder foutmelding in de UI. Toon de foutmelding (bijv. "Naam is verplicht") in het formulier.
 - [x] **`pocketbase` in devDependencies:** Runtime-dependency van de server — hoort in `dependencies` (deploy zonder devdeps breekt).
 - [x] **`@sveltejs/adapter-auto` ongebruikt:** `svelte.config.js` gebruikt `adapter-node`; verwijderen uit devDependencies.
-- [ ] **Svelte 4-syntax:** `export let data`, `on:click`, `<slot>` op Svelte 5 — migreren naar runes is hier optioneel maar klein genoeg om in één keer te doen.
+- [x] **Svelte 4-syntax:** `export let data`, `on:click`, `<slot>` op Svelte 5 — migreren naar runes is hier optioneel maar klein genoeg om in één keer te doen.
 - [x] **Deploy op `pull_request`:** Deployt naar productie bij elke PR — beperk tot `push` op main.
 - [x] **`npm install` i.p.v. `npm ci`:** In de Dockerfile; en pin `node:lts-alpine` op een vaste versie.
 - [x] **README aanvullen:** Documenteer de env-variabelen (`POCKETBASE_EMAIL/PASSWORD` zijn superuser-credentials — noem expliciet dat ze geheim moeten blijven) en hoe `json_to_pb.js` werkt.

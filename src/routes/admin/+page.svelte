@@ -1,8 +1,9 @@
 <script>
   import { resolve } from '$app/paths';
 
-  export let data;
-  const { stats, huidigBestuur } = data;
+  let { data } = $props();
+  const stats = $derived(data.stats);
+  const huidigBestuur = $derived(data.huidigBestuur);
 
   const menus = [
     {

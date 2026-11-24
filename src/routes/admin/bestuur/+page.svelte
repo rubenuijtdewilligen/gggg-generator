@@ -3,15 +3,10 @@
   import { env as publicEnv } from '$env/dynamic/public';
   import PocketBase from 'pocketbase';
 
-  export let data;
+  let { data } = $props();
   const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
 
-  let bestuur = data.bestuur || { naam: '', leden_json: [] };
-  let saveError = '';
-  let successMessage = false;
-
-  let ledenLijst = (() => {
-    const raw = bestuur?.leden_json;
+  function parseInitialLeden(raw, personen) {
     let parsed = [];
     if (Array.isArray(raw)) {
       parsed = raw;
@@ -28,7 +23,7 @@
         return { rol: lid.rol || '', persoonId: lid.persoonId };
       }
       // Fallback for old { rol, naam } data
-      const match = data.personen.find(
+      const match = personen.find(
         (p) => p.naam.trim().toLowerCase() === (lid.naam || '').trim().toLowerCase()
       );
       return {
@@ -37,7 +32,12 @@
         legacyNaam: match ? '' : lid.naam || ''
       };
     });
-  })();
+  }
+
+  let bestuur = $derived(data.bestuur ? { ...data.bestuur } : { naam: '', leden_json: [] });
+  let ledenLijst = $derived(parseInitialLeden(data.bestuur?.leden_json, data.personen));
+  let saveError = $state('');
+  let successMessage = $state(false);
 
   function voegLidToe() {
     ledenLijst = [...ledenLijst, { rol: '', persoonId: '' }];
@@ -58,7 +58,7 @@
       class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg border border-green-200 flex justify-between items-center"
     >
       <span>Bestuur succesvol opgeslagen!</span>
-      <button on:click={() => (successMessage = false)} class="text-green-900 font-bold"
+      <button onclick={() => (successMessage = false)} class="text-green-900 font-bold"
         >&times;</button
       >
     </div>
@@ -69,7 +69,7 @@
       class="mb-6 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 flex justify-between items-center"
     >
       <span>{saveError}</span>
-      <button on:click={() => (saveError = '')} class="text-red-900 font-bold">&times;</button>
+      <button onclick={() => (saveError = '')} class="text-red-900 font-bold">&times;</button>
     </div>
   {/if}
 
@@ -138,7 +138,7 @@
         </h3>
         <button
           type="button"
-          on:click={voegLidToe}
+          onclick={voegLidToe}
           class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition"
         >
           + Lid toevoegen
@@ -173,7 +173,7 @@
             </select>
             <button
               type="button"
-              on:click={() => verwijderLid(i)}
+              onclick={() => verwijderLid(i)}
               class="text-red-400 hover:text-red-600 p-2"
             >
               &times;

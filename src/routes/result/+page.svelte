@@ -1,5 +1,5 @@
 <script>
-  export let data;
+  let { data } = $props();
 
   const formatDate = (str) => str || '';
   const getDay = (str) => (str ? parseInt(str.split('-')[0]) : 0);
@@ -29,42 +29,45 @@
     'December'
   ];
 
-  let verjaardagen = {};
-  for (let i = 1; i <= 12; i++) verjaardagen[i] = [];
+  const verjaardagen = $derived.by(() => {
+    const map = {};
+    for (let i = 1; i <= 12; i++) map[i] = [];
 
-  data.personen.forEach((p) => {
-    if (p.geboortedatum) {
-      const m = getMonth(p.geboortedatum);
-      if (verjaardagen[m]) {
-        verjaardagen[m].push({ dag: getDay(p.geboortedatum), naam: p.naam });
+    for (const p of data.personen) {
+      if (p.geboortedatum) {
+        const m = getMonth(p.geboortedatum);
+        if (map[m]) {
+          map[m].push({ dag: getDay(p.geboortedatum), naam: p.naam });
+        }
       }
     }
+    for (let i = 1; i <= 12; i++) map[i].sort((a, b) => a.dag - b.dag);
+    return map;
   });
-  for (let i = 1; i <= 12; i++) verjaardagen[i].sort((a, b) => a.dag - b.dag);
 
-  const leden = data.personen.filter((p) => p.status === 'lid');
-  const ereleden = data.personen.filter((p) => p.status === 'erelid');
-  const aspiranten = data.personen.filter((p) => p.status === 'aspirant');
-  const reünisten = data.personen.filter((p) => p.status === 'reunist');
+  const leden = $derived(data.personen.filter((p) => p.status === 'lid'));
+  const ereleden = $derived(data.personen.filter((p) => p.status === 'erelid'));
+  const aspiranten = $derived(data.personen.filter((p) => p.status === 'aspirant'));
+  const reunisten = $derived(data.personen.filter((p) => p.status === 'reunist'));
 
-  const reunistenMetFoto = reünisten.filter((l) => l.foto);
-  const reunistenZonderFoto = reünisten.filter((l) => !l.foto);
+  const reunistenMetFoto = $derived(reunisten.filter((l) => l.foto));
+  const reunistenZonderFoto = $derived(reunisten.filter((l) => !l.foto));
 
-  const categorieen = [
+  const categorieen = $derived([
     { naam: 'Leden', data: leden },
     { naam: 'Ere-leden', data: ereleden },
     { naam: 'Aspiranten', data: aspiranten },
     { naam: 'Reünisten', data: reunistenMetFoto }
-  ];
+  ]);
 
-  const bachelors = data.studiesList.filter((s) => s.code.toUpperCase().startsWith('B'));
-  const masters = data.studiesList.filter((s) => s.code.toUpperCase().startsWith('M'));
+  const bachelors = $derived(data.studiesList.filter((s) => s.code.toUpperCase().startsWith('B')));
+  const masters = $derived(data.studiesList.filter((s) => s.code.toUpperCase().startsWith('M')));
 </script>
 
 <div class="fixed bottom-6 right-6 z-50 print:hidden">
   <button
     type="button"
-    on:click={() => window.print()}
+    onclick={() => window.print()}
     class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl shadow-xl transition cursor-pointer flex items-center gap-2"
   >
     <span>🖨️</span>

@@ -1,17 +1,21 @@
 <script>
   import { enhance } from '$app/forms';
 
-  export let data;
+  let { data } = $props();
 
-  let config = data.config || {
-    titel: 'Ledenlijst',
-    jaargang: 'Jaargang 1',
-    jaren: '2025-2026',
-    hoofdkleur: '#ff0000'
-  };
+  let config = $derived(
+    data.config
+      ? { ...data.config }
+      : {
+          titel: 'Ledenlijst',
+          jaargang: 'Jaargang 1',
+          jaren: '2025-2026',
+          hoofdkleur: '#ff0000'
+        }
+  );
 
-  let successMessage = false;
-  let saveError = '';
+  let successMessage = $state(false);
+  let saveError = $state('');
 </script>
 
 <main class="p-8 max-w-2xl mx-auto font-sans">
@@ -25,7 +29,7 @@
       class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg border border-green-200 flex justify-between items-center"
     >
       <span>Instellingen succesvol opgeslagen!</span>
-      <button on:click={() => (successMessage = false)} class="text-green-900 font-bold"
+      <button onclick={() => (successMessage = false)} class="text-green-900 font-bold"
         >&times;</button
       >
     </div>
@@ -36,7 +40,7 @@
       class="mb-6 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 flex justify-between items-center"
     >
       <span>{saveError}</span>
-      <button on:click={() => (saveError = '')} class="text-red-900 font-bold">&times;</button>
+      <button onclick={() => (saveError = '')} class="text-red-900 font-bold">&times;</button>
     </div>
   {/if}
 

@@ -1,5 +1,7 @@
 <script>
   import { resolve } from '$app/paths';
+
+  let { children } = $props();
 </script>
 
 <nav class="bg-gray-800 text-white p-4 flex gap-4">
@@ -14,4 +16,4 @@
   </a>
 </nav>
 
-<slot />
+{@render children?.()}

@@ -4,25 +4,25 @@
   import PocketBase from 'pocketbase';
   import { isValidDutchDate } from '$lib/date';
 
-  export let data;
-  let bewerkLid = null;
-  let lidOmTeVerwijderen = null;
-  let deleteError = '';
-  let saveError = '';
+  let { data } = $props();
+  let bewerkLid = $state(null);
+  let lidOmTeVerwijderen = $state(null);
+  let deleteError = $state('');
+  let saveError = $state('');
 
   const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
 
-  $: ongeldigeDatums = data.personen.filter(
-    (p) => p.geboortedatum && !isValidDutchDate(p.geboortedatum)
+  let ongeldigeDatums = $derived(
+    data.personen.filter((p) => p.geboortedatum && !isValidDutchDate(p.geboortedatum))
   );
-  $: ontbrekendeDatums = data.personen.filter((p) => !p.geboortedatum);
+  let ontbrekendeDatums = $derived(data.personen.filter((p) => !p.geboortedatum));
 </script>
 
 <main class="p-8 max-w-6xl mx-auto font-sans">
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-3xl font-bold">Personenbeheer</h1>
     <button
-      on:click={() => {
+      onclick={() => {
         saveError = '';
         bewerkLid = { status: 'lid' };
       }}
@@ -43,7 +43,7 @@
         {#each ongeldigeDatums as p (p.id)}
           <button
             type="button"
-            on:click={() => {
+            onclick={() => {
               saveError = '';
               bewerkLid = p;
             }}
@@ -107,14 +107,14 @@
             <td class="p-4 text-gray-500">{p.expand?.studie?.code || '-'}</td>
             <td class="p-4 text-right space-x-3">
               <button
-                on:click={() => {
+                onclick={() => {
                   saveError = '';
                   bewerkLid = p;
                 }}
                 class="text-blue-600 hover:underline">Bewerk</button
               >
               <button
-                on:click={() => {
+                onclick={() => {
                   deleteError = '';
                   lidOmTeVerwijderen = p;
                 }}
@@ -168,7 +168,7 @@
         <div class="flex gap-3">
           <button
             type="button"
-            on:click={() => {
+            onclick={() => {
               deleteError = '';
               lidOmTeVerwijderen = null;
             }}
@@ -231,7 +231,7 @@
           <h2 class="text-2xl font-bold">{bewerkLid.id ? 'Persoon Bewerken' : 'Nieuw Persoon'}</h2>
           <button
             type="button"
-            on:click={() => {
+            onclick={() => {
               saveError = '';
               bewerkLid = null;
             }}
@@ -379,7 +379,7 @@
         <div class="mt-8 flex justify-end gap-3 border-t pt-6">
           <button
             type="button"
-            on:click={() => {
+            onclick={() => {
               saveError = '';
               bewerkLid = null;
             }}
