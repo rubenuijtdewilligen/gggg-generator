@@ -43,10 +43,18 @@
     }
   ];
 
-  let leden =
-    typeof huidigBestuur.leden_json === 'string'
-      ? JSON.parse(huidigBestuur.leden_json || '[]')
-      : huidigBestuur.leden_json || [];
+  let leden = (() => {
+    const raw = huidigBestuur?.leden_json;
+    if (Array.isArray(raw)) return raw;
+    if (typeof raw === 'string' && raw.trim() !== '') {
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  })();
 </script>
 
 <main class="p-8 max-w-6xl mx-auto font-sans">
@@ -125,7 +133,7 @@
           <h2 class="text-3xl font-serif italic mb-2">{huidigBestuur.naam}</h2>
 
           <div class="mt-8 space-y-2 opacity-80">
-            {#each leden as lid (lid.naam)}
+            {#each leden as lid, i (i)}
               <div class="text-sm border-l border-blue-500 pl-4 py-1">
                 <span class="font-bold">{lid.rol}:</span>
                 {lid.naam}

@@ -95,20 +95,30 @@
   </section>
 
   <section class="h-[297mm] w-full p-[10mm_15mm] overflow-hidden break-after-page">
-    <h2 class="text-5xl century-gothic-italic-bold text-center mt-16">
-      {data.bestuur.naam}
-    </h2>
-    <img
-      src={data.bestuur.foto}
-      alt="Bestuur"
-      class="max-w-xl w-full mx-auto my-16 object-contain"
-    />
-    <div class="text-lg text-center">
-      <i>van links naar rechts</i>
-      {#each data.bestuur.leden as lid (lid.naam)}
-        <div>{lid.rol}: {lid.naam}</div>
-      {/each}
-    </div>
+    {#if data.bestuur?.naam || data.bestuur?.foto || data.bestuur?.leden?.length > 0}
+      <h2 class="text-5xl century-gothic-italic-bold text-center mt-16">
+        {data.bestuur.naam}
+      </h2>
+      {#if data.bestuur.foto}
+        <img
+          src={data.bestuur.foto}
+          alt="Bestuur"
+          class="max-w-xl w-full mx-auto my-16 object-contain"
+        />
+      {/if}
+      {#if data.bestuur.leden.length > 0}
+        <div class="text-lg text-center mt-8">
+          <i>van links naar rechts</i>
+          {#each data.bestuur.leden as lid, i (i)}
+            <div>{lid.rol}: {lid.naam}</div>
+          {/each}
+        </div>
+      {/if}
+    {:else}
+      <div class="h-full flex items-center justify-center text-gray-400 italic text-xl">
+        Geen bestuursgegevens geconfigureerd.
+      </div>
+    {/if}
   </section>
 
   <section class="h-[297mm] w-full p-[10mm_15mm] overflow-hidden break-after-page">

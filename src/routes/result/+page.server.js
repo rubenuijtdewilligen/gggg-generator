@@ -1,3 +1,16 @@
+function parseLedenJson(raw) {
+  if (Array.isArray(raw)) return raw;
+  if (typeof raw === 'string' && raw.trim() !== '') {
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
 export async function load({ locals }) {
   const [personen, besturen, configs, studies] = await Promise.all([
     locals.pb.collection('personen').getFullList({
@@ -13,23 +26,27 @@ export async function load({ locals }) {
     titel: 'Ledenlijst',
     jaargang: '',
     jaren: '',
-    hoofdkleur: '#000000'
+    hoofdkleur: '#db1f0d'
   };
-  const bestuur = besturen[0];
+  const bestuur = besturen[0] || null;
 
   const getFileUrl = (record, filename) =>
-    filename ? locals.pb.files.getURL(record, filename) : null;
+    record && filename ? locals.pb.files.getURL(record, filename) : null;
 
   return {
     config,
-    bestuur: {
-      ...bestuur,
-      foto: getFileUrl(bestuur, bestuur?.foto),
-      leden:
-        typeof bestuur?.leden_json === 'string'
-          ? JSON.parse(bestuur.leden_json)
-          : bestuur?.leden_json || []
-    },
+    bestuur: bestuur
+      ? {
+          ...bestuur,
+          naam: bestuur.naam || 'Bestuur',
+          foto: getFileUrl(bestuur, bestuur.foto),
+          leden: parseLedenJson(bestuur.leden_json)
+        }
+      : {
+          naam: '',
+          foto: null,
+          leden: []
+        },
     personen: personen.map((p) => ({
       ...p,
       foto: getFileUrl(p, p.foto),

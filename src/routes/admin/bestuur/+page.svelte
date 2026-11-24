@@ -7,7 +7,18 @@
   const pb = new PocketBase(publicEnv.PUBLIC_POCKETBASE_URL);
 
   let bestuur = data.bestuur || { naam: '', jaar: '', leden_json: [] };
-  let ledenLijst = bestuur.leden_json || [];
+  let ledenLijst = (() => {
+    const raw = bestuur?.leden_json;
+    if (Array.isArray(raw)) return raw;
+    if (typeof raw === 'string' && raw.trim() !== '') {
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  })();
 
   function voegLidToe() {
     ledenLijst = [...ledenLijst, { rol: '', naam: '' }];
