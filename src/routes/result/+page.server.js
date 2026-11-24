@@ -33,8 +33,10 @@ export async function load({ locals }) {
   };
   const bestuur = besturen[0] || null;
 
-  const getFileUrl = (record, filename) =>
-    record && filename ? locals.pb.files.getURL(record, filename) : null;
+  const getFileUrl = (record, filename, thumb) =>
+    record && filename
+      ? locals.pb.files.getURL(record, filename, thumb ? { thumb } : undefined)
+      : null;
 
   const personenById = new Map(personen.map((p) => [p.id, p]));
   const rawLeden = bestuur ? parseLedenJson(bestuur.leden_json) : [];
@@ -59,7 +61,7 @@ export async function load({ locals }) {
         },
     personen: personen.map((p) => ({
       ...p,
-      foto: getFileUrl(p, p.foto),
+      foto: getFileUrl(p, p.foto, '420x540'),
       studieCode: p.expand?.studie?.code || ''
     })),
     studiesList: studies

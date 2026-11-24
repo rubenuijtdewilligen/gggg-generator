@@ -25,7 +25,7 @@ Deze to-do lijst is gegenereerd door Mistral Medium 3.5.
 - [ ] **Reünisten-splitsing onverklaarbaar voor de gebruiker:** Reünisten mét foto komen in het fotogrid, zónder foto in een tekstlijst achteraan — dat is nu impliciet gedrag. Beschrijf het in de admin-UI (bijv. een hint bij de reünist-status) zodat de gids-maker snapt welke lijst waar terechtkomt.
 - [x] **Kleurveld ongevalideerd:** `hoofdkleur` gaat als vrije tekst de DB in; een ongeldige waarde breekt de CSS-variabele (`style="--primary-color: {..}"`). Met `type="color"` in de admin is het gros gedekt, maar valideer server-side op `#RRGGBB`.
 - [x] **Printflow controleren:** De gids is A4-geprint; check dat `break-after-page` + de `@page`-regels in Chrome én Firefox de pagina's exact op A4-breuk zetten (de lege tweede sectie suggereert handmatige paginatie). Voeg een "Print als PDF"-knop toe i.p.v. reliance op Ctrl+P.
-- [ ] **Foto's zonder thumbnail:** Personen-bestanden (max 100 MB!) worden ongeschaald in de gids en in de admin-tabel geladen (`object-cover` op de browser). Voeg `thumbs` toe aan het foto-veld in het schema en gebruik een `100x100`-thumb in overzichten — nu kan één gids tientallen MB aan foto's laden.
+- [x] **Foto's zonder thumbnail:** Personen-bestanden (max 100 MB!) worden ongeschaald in de gids en in de admin-tabel geladen (`object-cover` op de browser). Voeg `thumbs` toe aan het foto-veld in het schema en gebruik een `100x100`-thumb in overzichten — nu kan één gids tientallen MB aan foto's laden.
 
 ## 4. Hygiëne & DevOps
 

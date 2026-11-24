@@ -926,7 +926,7 @@
         "protected": false,
         "required": false,
         "system": false,
-        "thumbs": [],
+        "thumbs": ["100x100", "420x540"],
         "type": "file"
       },
       {
