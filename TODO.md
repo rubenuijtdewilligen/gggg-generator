@@ -15,7 +15,6 @@ Deze to-do lijst is gegenereerd door Mistral Medium 3.5.
 
 - [ ] **Geen enkele input-validatie:** Alle `save`-actions sturen `formData` ongefilterd naar PB. Velden die géén form-input zijn (zoals `status` bij personen) kunnen via een gemanipuleerde POST elke willekeurige waarde krijgen. Valideer minimaal naam (verplicht), status (whitelist), geboortedatum (formaat DD-MM-YYYY), email, en lengtes.
 - [ ] **Geboortedatum is tekst:** `geboortedatum` staat als los tekstveld in het schema; de verjaardagen-pagina doet zelf `parseInt(str.split('-')[0])`. Eén verkeerd formaat (`2024-05-01` i.p.v. `01-05-2024`) en de persoon staat in de verkeerde maand, stil. Maak het een date-veld óf valideer het formaat hard (server én client, `type="date"`).
-- [ ] **Typo's in schemavelden:** `adres_thuisthuis` (i.p.v. `thuishuis`) en in `json_to_pb.js` `process.env.publicEnv.PUBLIC_POCKETBASE_URL` (i.p.v. `process.env.PUBLIC_POCKETBASE_URL`) — het import-script crasht dus meteen bij het opstarten. Fix het script; hernoem het DB-veld alleen als je ook de import/gids-data meeneemt.
 - [x] **`jaar`-veld bestuur wordt nergens gebruikt:** In het admin-formulier ontbreekt het `jaar`-veld terwijl het schema het kent (alleen het import-script vult het). Voeg het toe aan het formulier of gebruik `config.jaren` consequent.
 - [x] **Geen unieke indexen:** `studies.code` en `personen.naam` kunnen duplicaten bevatten (dubbele import = alles dubbel). Voeg een unieke index op `studies.code` toe en overweeg die op `personen.naam`.
 - [x] **Import-script niet idempotent:** `json_to_pb.js` maakt bij elke run alles opnieuw aan — een tweede run verdubbelt de hele database. Laat het script bestaande records upserten of eerst legen (met bevestiging).
@@ -35,7 +34,7 @@ Deze to-do lijst is gegenereerd door Mistral Medium 3.5.
 - [ ] **`@sveltejs/adapter-auto` ongebruikt:** `svelte.config.js` gebruikt `adapter-node`; verwijderen uit devDependencies.
 - [ ] **Svelte 4-syntax:** `export let data`, `on:click`, `<slot>` op Svelte 5 — migreren naar runes is hier optioneel maar klein genoeg om in één keer te doen.
 - [ ] **Deploy op `pull_request`:** Deployt naar productie bij elke PR — beperk tot `push` op main.
-- [ ] **Geen `.dockerignore`:** `COPY . /usr/src/app` neemt `.env` (met PB-superuser-credentials!) en `node_modules` mee in de build. Direct toevoegen.
+
 - [ ] **`npm install` i.p.v. `npm ci`:** In de Dockerfile; en pin `node:lts-alpine` op een vaste versie.
 - [ ] **README aanvullen:** Documenteer de env-variabelen (`POCKETBASE_EMAIL/PASSWORD` zijn superuser-credentials — noem expliciet dat ze geheim moeten blijven) en hoe `json_to_pb.js` werkt.
 - [x] **robots.txt:** De app bevat leden-PII achter CapRover-auth, maar `/result` is server-side open zonder app-auth. Overweeg `Disallow: /` — deze tool hoeft niet geïndexeerd te worden.
