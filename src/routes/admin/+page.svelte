@@ -34,9 +34,9 @@
       kleur: 'bg-gray-600'
     },
     {
-      titel: 'Gids genereren',
+      titel: 'GGGG genereren',
       beschrijving: 'Bekijk en print de GGGG.',
-      href: '/gids',
+      href: '/result',
       icon: '📖',
       kleur: 'bg-green-600',
       target: '_blank'

@@ -16,7 +16,7 @@
 <main class="p-8 max-w-2xl mx-auto font-sans">
   <div class="mb-8">
     <h1 class="text-3xl font-bold">Algemene Configuratie</h1>
-    <p class="text-gray-500">Pas de teksten op de voorpagina en de huisstijl van de gids aan.</p>
+    <p class="text-gray-500">Pas de teksten op de voorpagina en de huisstijl van de GGGG aan.</p>
   </div>
 
   {#if successMessage}
@@ -85,7 +85,7 @@
 
       <div class="flex items-center gap-6 p-4 bg-gray-50 rounded-lg">
         <label class="flex flex-col gap-2 cursor-pointer">
-          <span class="text-sm font-semibold text-gray-700">Hoofdkleur Gids</span>
+          <span class="text-sm font-semibold text-gray-700">Hoofdkleur GGGG</span>
           <input
             type="color"
             name="hoofdkleur"
